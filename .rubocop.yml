@@ -1,0 +1,13 @@
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'vendor/**/*'
+    - 'spec/fixtures/**/*'
+    - 'tmp/**/*'
+    - '.git/**/*'
+    - 'bin/*'
+  TargetRubyVersion: 2.4
+Layout/ExtraSpacing:
+  ForceEqualSignAlignment: true
+Style/IfUnlessModifier:
+  Enabled: false

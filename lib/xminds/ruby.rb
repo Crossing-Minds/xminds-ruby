@@ -1,4 +1,6 @@
-require "xminds/ruby/version"
+# frozen_string_literal: true
+
+require 'xminds/ruby/version'
 
 module Xminds
   module Ruby
