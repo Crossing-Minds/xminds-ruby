@@ -1,0 +1,18 @@
+
+stages:
+  - tests
+
+
+# On all branches, run unit tests
+unit test:
+  stage: tests
+  image: ruby:3.0.0
+  variables:
+    XMINDS_API_TEST_ENDPOINT: https://staging-api.crossingminds.com
+    XMINDS_API_ROOT_EMAIL: emile+shared-test-org-staging@crossingminds.com
+    XMINDS_API_ROOT_PASSWORD: 0siLKsrjqn8qaJfk
+  script:
+    - ./bin/setup
+    - rspec
+  tags:
+    - open-source-unit-test

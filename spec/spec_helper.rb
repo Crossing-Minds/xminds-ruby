@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
-require 'xminds/ruby'
+require 'dotenv/load'
+require 'faker'
+
+require 'xminds'
+
+require File.join(File.expand_path(__dir__), 'helpers/client_helpers')
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -12,5 +17,23 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  config.include ClientHelpers
+
+  config.before(:suite) do
+    helpers = Class.new.extend(ClientHelpers)
+
+    helpers.delete_test_account
+
+    helpers.create_test_account
+    helpers.create_new_test_db
+  end
+
+  config.after(:suite) do
+    helpers = Class.new.extend(ClientHelpers)
+
+    helpers.delete_test_database
+    helpers.delete_test_account
   end
 end

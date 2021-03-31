@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require_relative 'lib/xminds/ruby/version'
+require_relative 'lib/xminds/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'xminds-ruby'
-  spec.version       = Xminds::Ruby::VERSION
+  spec.name          = 'xminds'
+  spec.version       = Xminds::VERSION
   spec.authors       = ['Travis Hooper']
-  spec.email         = ['travisdhooper@gmail.com']
+  spec.email         = ['contact@crossingminds.com']
 
-  spec.summary       = 'Crossing Minds data science Ruby library and API client'
+  spec.summary       = 'Ruby client for Crossing Minds API'
   spec.description   = ''
-  spec.homepage      = 'https://github.com/Crossing-Minds/xminds-ruby'
+  spec.homepage      = 'https://github.com/Crossing-Minds/xminds'
   spec.license       = 'MIT'
 
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.4.0')
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.5.0')
 
-  spec.metadata['allowed_push_host'] = "TODO: Set to \'http://mygemserver.com\'"
+  spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
   spec.metadata['homepage_uri']    = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
