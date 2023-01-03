@@ -66,10 +66,10 @@ RSpec.describe Xminds::Endpoints::Recommendation do
       end
     end
 
-    context 'when a filter is invalid' do
+    context 'when trying to filter by a non existing item property' do
       let(:item_id) { client.list_all_items.items.sample.item_id }
 
-      it 'raises a WRONG_DATA_TYPE error' do
+      it 'raises a ITEM_PROPERTY_NOT_FOUND error' do
         expect do
           subject.list_similar_item_recommendations(
             item_id: item_id,
@@ -78,9 +78,11 @@ RSpec.describe Xminds::Endpoints::Recommendation do
           )
         end.to raise_error(
           an_instance_of(Xminds::ResponseError).and having_attributes(
-            error_name: 'WrongData',
+            error_name: 'NotFoundError',
             error_data: {
-              error: "unknown property 'INVALID' in filters"
+              type: "item-property",
+              key: "INVALID",
+              name: "ITEM_PROPERTY_NOT_FOUND"
             }
           )
         )
@@ -125,16 +127,20 @@ RSpec.describe Xminds::Endpoints::Recommendation do
       end
     end
 
-    context 'when a filter is invalid' do
-      it 'raises a WRONG_DATA_TYPE error' do
+    context 'when trying to filter by a non existing item property' do
+      it 'raises a ITEM_PROPERTY_NOT_FOUND error' do
         expect do
           subject.list_session_based_item_recommendations(
             filters: [{ property_name: 'INVALID', op: 'gt', value: 4.0 }]
           )
         end.to raise_error(
           an_instance_of(Xminds::ResponseError).and having_attributes(
-            error_name: 'WrongData',
-            error_data: { error: "unknown property 'INVALID' in filters" }
+            error_name: 'NotFoundError',
+            error_data: {
+              type: "item-property",
+              key: "INVALID",
+              name: "ITEM_PROPERTY_NOT_FOUND"
+            }
           )
         )
       end
@@ -194,10 +200,10 @@ RSpec.describe Xminds::Endpoints::Recommendation do
       end
     end
 
-    context 'when a filter is invalid' do
+    context 'when trying to filter by a non existing item property' do
       let(:user_id) { client.list_all_users.users.sample.user_id }
 
-      it 'raises a WRONG_DATA_TYPE error' do
+      it 'raises a ITEM_PROPERTY_NOT_FOUND error' do
         expect do
           subject.list_profile_based_item_recommendations(
             user_id: user_id,
@@ -207,8 +213,12 @@ RSpec.describe Xminds::Endpoints::Recommendation do
           )
         end.to raise_error(
           an_instance_of(Xminds::ResponseError).and having_attributes(
-            error_name: 'WrongData',
-            error_data: { error: "unknown property 'INVALID' in filters" }
+            error_name: 'NotFoundError',
+            error_data: {
+              type: "item-property",
+              key: "INVALID",
+              name: "ITEM_PROPERTY_NOT_FOUND"
+            }
           )
         )
       end

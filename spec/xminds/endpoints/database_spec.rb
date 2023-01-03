@@ -38,8 +38,8 @@ RSpec.describe Xminds::Endpoints::Database do
           an_instance_of(Xminds::ResponseError).and having_attributes(
             error_name: 'DuplicatedError',
             error_data: {
-              type: 'db-metadata',
-              key: nil,
+              type: 'database',
+              key: 'xminds_rspec_test_database',
               name: 'DUPLICATED_DB_NAME'
             }
           )

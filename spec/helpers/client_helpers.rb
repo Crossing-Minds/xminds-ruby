@@ -9,7 +9,7 @@ module ClientHelpers
   ROOT_EMAIL                = ENV.fetch('XMINDS_API_ROOT_EMAIL').freeze
   ROOT_PASSWORD             = ENV.fetch('XMINDS_API_ROOT_PASSWORD').freeze
   TEST_ACCOUNT_SERVICE_NAME = 'xminds_rspec_test_account'
-  TEST_ACCOUNT_PASSWORD     = Faker::Internet.password.freeze
+  TEST_ACCOUNT_PASSWORD     = 'MyP@ssw0rd_01'
 
   def root_client
     @root_client ||= Xminds::Client.new(

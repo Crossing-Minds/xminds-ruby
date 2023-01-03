@@ -2,11 +2,12 @@
 
 RSpec.describe Xminds::Configuration do
   let(:endpoint) { Faker::Internet.url }
-  let(:password) { Faker::Internet.password }
+  let(:password) { Faker::Internet.password(min_length: 12, mix_case: true, special_characters: true) }
   let(:email) { Faker::Internet.email }
   let(:database_id) { "DATABASE_ID-#{Faker::Alphanumeric.alphanumeric(number: 6)}" }
   let(:service_name) { "SERVICE_NAME-#{Faker::Alphanumeric.alphanumeric(number: 6)}" }
   let(:frontend_user_id) { Faker::Number.number.to_s }
+  let(:frontend_session_id) { Faker::Number.number.to_s }
 
   describe '#initialize' do
     before do
@@ -17,6 +18,8 @@ RSpec.describe Xminds::Configuration do
       allow(ENV).to receive(:[]).with('XMINDS_API_SERVICE_NAME').and_return(service_name)
       allow(ENV).to receive(:key?).with('XMINDS_API_FRONTEND_USER_ID').and_return(true)
       allow(ENV).to receive(:[]).with('XMINDS_API_FRONTEND_USER_ID').and_return(frontend_user_id)
+      allow(ENV).to receive(:key?).with('XMINDS_API_FRONTEND_SESSION_ID').and_return(true)
+      allow(ENV).to receive(:[]).with('XMINDS_API_FRONTEND_SESSION_ID').and_return(frontend_session_id)
     end
 
     it 'defaults config values to environment variables' do
@@ -28,6 +31,7 @@ RSpec.describe Xminds::Configuration do
       expect(config.database_id).to eq(database_id)
       expect(config.service_name).to eq(service_name)
       expect(config.frontend_user_id).to eq(frontend_user_id)
+      expect(config.frontend_session_id).to eq(frontend_session_id)
     end
   end
 end

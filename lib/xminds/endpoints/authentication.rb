@@ -30,27 +30,29 @@ module Xminds
         delete(path: 'accounts/service/', body: { name: service_name })
       end
 
-      def login_as_individual(email:, password:, database_id:, frontend_user_id: nil)
+      def login_as_individual(email:, password:, database_id:, frontend_user_id: nil, frontend_session_id: nil)
         post(
           path: 'login/individual/',
           body: {
             email: email,
             password: password,
             db_id: database_id,
-            frontend_user_id: frontend_user_id
+            frontend_user_id: frontend_user_id,
+            frontend_session_id: frontend_session_id
           }.compact,
           auth_required: false
         )
       end
 
-      def login_as_service(service_name:, password:, database_id:, frontend_user_id: nil)
+      def login_as_service(service_name:, password:, database_id:, frontend_user_id: nil, frontend_session_id: nil)
         post(
           path: 'login/service/',
           body: {
             name: service_name,
             password: password,
             db_id: database_id,
-            frontend_user_id: frontend_user_id
+            frontend_user_id: frontend_user_id,
+            frontend_session_id: frontend_session_id
           }.compact,
           auth_required: false
         )
@@ -77,7 +79,7 @@ module Xminds
       end
 
       def verify_email(email:, code:)
-        get(path: 'accounts/verify/', query: { email: email, code: code })
+        post(path: 'accounts/verify/', body: { email: email, code: code })
       end
 
       def delete_current_account

@@ -15,11 +15,12 @@ RSpec.describe Xminds::Client do
   let(:refresh_token) { "REFRESH_TOKEN-#{Faker::Alphanumeric.alphanumeric(number: 6)}" }
 
   let(:endpoint) { Faker::Internet.url }
-  let(:password) { Faker::Internet.password }
+  let(:password) { Faker::Internet.password(min_length: 12, mix_case: true, special_characters: true) }
   let(:email) { Faker::Internet.email }
   let(:database_id) { "DATABASE_ID-#{Faker::Alphanumeric.alphanumeric(number: 6)}" }
   let(:service_name) { "SERVICE_NAME-#{Faker::Alphanumeric.alphanumeric(number: 6)}" }
   let(:frontend_user_id) { "FRONTEND_USER_ID-#{Faker::Alphanumeric.alphanumeric(number: 6)}" }
+  let(:frontend_session_id) { "FRONTEND_SESSION_ID-#{Faker::Alphanumeric.alphanumeric(number: 6)}" }
 
   describe '#initialize' do
     before do
@@ -35,7 +36,8 @@ RSpec.describe Xminds::Client do
           password: password,
           database_id: database_id,
           service_name: service_name,
-          frontend_user_id: frontend_user_id
+          frontend_user_id: frontend_user_id,
+          frontend_session_id: frontend_session_id
         )
 
         expect(client.type).to eq(:individual)
@@ -45,6 +47,7 @@ RSpec.describe Xminds::Client do
         expect(client.database_id).to eq(database_id)
         expect(client.service_name).to eq(service_name)
         expect(client.frontend_user_id).to eq(frontend_user_id)
+        expect(client.frontend_session_id).to eq(frontend_session_id)
 
         expect(client.jwt_token).to eq(jwt_token)
         expect(client.refresh_token).to eq(refresh_token)
@@ -60,6 +63,7 @@ RSpec.describe Xminds::Client do
           config.database_id      = database_id
           config.service_name     = service_name
           config.frontend_user_id = frontend_user_id
+          config.frontend_session_id       = frontend_session_id
         end
       end
 
@@ -75,6 +79,7 @@ RSpec.describe Xminds::Client do
         expect(client.database_id).to eq(database_id)
         expect(client.service_name).to eq(service_name)
         expect(client.frontend_user_id).to eq(frontend_user_id)
+        expect(client.frontend_session_id).to eq(frontend_session_id)
 
         expect(client.jwt_token).to eq(jwt_token)
         expect(client.refresh_token).to eq(refresh_token)

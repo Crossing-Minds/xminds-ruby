@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-By default, the library is configured to use Crossing Minds primary endpoint - https://api.crossingminds.com - as the endpoint and accepts configuration values needed for the specific account type to create the client: endpoint, email, password, database ID, service name, and frontend user ID from the following environment variables: `XMINDS_API_ENDPOINT`, `XMINDS_API_EMAIL`, `XMINDS_API_PWD`, `XMINDS_API_DATABASE_ID`, `XMINDS_API_SERVICE_NAME`, and `XMINDS_API_FRONTEND_USER_ID`. To configure the library differently:
+By default, the library is configured to use Crossing Minds primary endpoint - https://api.crossingminds.com - as the endpoint and accepts configuration values needed for the specific account type to create the client: endpoint, email, password, database ID, service name, and frontend user ID from the following environment variables: `XMINDS_API_ENDPOINT`, `XMINDS_API_EMAIL`, `XMINDS_API_PWD`, `XMINDS_API_DATABASE_ID`, `XMINDS_API_SERVICE_NAME`, `XMINDS_API_FRONTEND_USER_ID` and `XMINDS_API_FRONTEND_SESSION_ID`. To configure the library differently:
 
 ```ruby
 Xminds.configure do |config|
@@ -30,6 +30,7 @@ Xminds.configure do |config|
   config.database_id      = 'wSSZQbPxKvBrk_n2B_m6ZA'        # overwrites default of $XMINDS_API_DATABASE_ID
   config.service_name     = 'Example DB name'               # overwrites default of $XMINDS_API_SERVICE_NAME
   config.frontend_user_id = 12358                           # overwrites default of $XMINDS_API_FRONTEND_USER_ID
+  config.frontend_session_id       = 85321                           # overwrites default of $XMINDS_API_FRONTEND_SESSION_ID
 end
 ```
 
@@ -58,7 +59,8 @@ client = Xminds::Client.new(
   email: 'individual.account@example.com',
   password: 'MyP@ssw0rd',
   database_id: 'wSSZQbPxKvBrk_n2B_m6ZA',
-  frontend_user_id: '5906d464-7ef1-4377-96e3-529f2ed6721d' # optional
+  frontend_user_id: '5906d464-7ef1-4377-96e3-529f2ed6721d', # optional
+  frontend_session_id: '6306d431-6fe4-9877-12e3-412f2ed6832d' # optional
 )
 
 client.list_all_accounts
@@ -72,7 +74,8 @@ client = Xminds::Client.new(
   service_name: 'myapp-web',
   password: 'MyP@ssw0rd',
   database_id: 'wSSZQbPxKvBrk_n2B_m6ZA',
-  frontend_user_id: '5906d464-7ef1-4377-96e3-529f2ed6721d' # optional
+  frontend_user_id: '5906d464-7ef1-4377-96e3-529f2ed6721d', # optional
+  frontend_session_id: '6306d431-6fe4-9877-12e3-412f2ed6832d' # optional
 )
 
 client.list_all_accounts
@@ -89,8 +92,8 @@ All of [Crossing Minds endpoints are supported](https://docs.api.crossingminds.c
 |                                                                                               | [DELETE] Delete individual account                 | Client#delete_individual_account(email:)                                                                                                               |
 |                                                                                               | [POST] Create service account                      | Client#create_service_account(service_name:, password:, role:)                                                                                         |
 |                                                                                               | [DELETE] Delete service account                    | Client#delete_service_account(service_name:)                                                                                                           |
-|                                                                                               | [POST] Login as individual account                 | Client#login_as_individual(email:, password:, database_id:, frontend_user_id: nil)                                                                     |
-|                                                                                               | [POST] Login as service account                    | Client#login_as_service(service_name:, password:, database_id:, frontend_user_id: nil)                                                                 |
+|                                                                                               | [POST] Login as individual account                 | Client#login_as_individual(email:, password:, database_id:, frontend_user_id: nil, frontend_session_id: nil)                                                                     |
+|                                                                                               | [POST] Login as service account                    | Client#login_as_service(service_name:, password:, database_id:, frontend_user_id: nil, frontend_session_id: nil)                                                                 |
 |                                                                                               | [POST] Login as root account                       | Client#login_as_root(email:, password:)                                                                                                                |
 |                                                                                               | [POST] Renew login with refresh token              | Client#renew_login_with_refresh_token(refresh_token:)                                                                                                  |
 |                                                                                               | [POST] Renew login with refresh token              | Client#resend_email_verification_code(email:)                                                                                                          |

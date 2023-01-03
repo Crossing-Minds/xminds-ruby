@@ -200,7 +200,7 @@ RSpec.describe Xminds::Endpoints::UsersDataAndProperties do
           an_instance_of(Xminds::ResponseError).and having_attributes(
             error_name: 'WrongData',
             error_data: {
-              error: 'unknown property "invalid" with "repeated=False". Available: [\'age\']',
+              error: 'unknown property "invalid" with "repeated=False". Available: `age`',
               name: 'WRONG_DATA_TYPE'
             }
           )
@@ -222,9 +222,15 @@ RSpec.describe Xminds::Endpoints::UsersDataAndProperties do
           user_id: user_id,
           user: { property_name => new_property_value }
         )
+        
+        @expected = { 
+          :user_created  => false,
+          :user_modified    => true
+        }.to_json
 
+        # assertions
         expect(resp).to be_a(Xminds::Response)
-        expect(resp.body).to eq('')
+        resp.should == @expected
       end
 
       context 'when an invalid property is sent' do
@@ -238,7 +244,7 @@ RSpec.describe Xminds::Endpoints::UsersDataAndProperties do
             an_instance_of(Xminds::ResponseError).and having_attributes(
               error_name: 'WrongData',
               error_data: {
-                error: 'unknown property "invalid" with "repeated=False". Available: [\'age\']',
+                error: 'unknown property "invalid" with "repeated=False". Available: `age`',
                 name: 'WRONG_DATA_TYPE'
               }
             )
@@ -310,7 +316,7 @@ RSpec.describe Xminds::Endpoints::UsersDataAndProperties do
           an_instance_of(Xminds::ResponseError).and having_attributes(
             error_name: 'WrongData',
             error_data: {
-              error: 'unknown property "invalid" with "repeated=False". Available: [\'age\']',
+              error: 'unknown property "invalid" with "repeated=False". Available: `age`',
               name: 'WRONG_DATA_TYPE'
             }
           )
@@ -394,7 +400,7 @@ RSpec.describe Xminds::Endpoints::UsersDataAndProperties do
           an_instance_of(Xminds::ResponseError).and having_attributes(
             error_name: 'WrongData',
             error_data: {
-              error: 'unknown property "invalid" with "repeated=False". Available: [\'age\']',
+              error: 'unknown property "invalid" with "repeated=False". Available: `age`',
               name: 'WRONG_DATA_TYPE'
             }
           )
@@ -407,30 +413,22 @@ RSpec.describe Xminds::Endpoints::UsersDataAndProperties do
       let(:property_value1) { Faker::Number.within(range: 1..100) }
       let(:property_value2) { property_value1 + 5 }
 
-      it 'raises a DuplicatedError' do
-        expect do
-          subject.partial_update_user_bulk(
-            users: [
-              {
-                user_id: user_id,
-                property_name => property_value1
-              }, {
-                user_id: user_id,
-                property_name => property_value2
-              }
-            ],
-            create_if_missing: true
-          )
-        end.to raise_error(
-          an_instance_of(Xminds::ResponseError).and having_attributes(
-            error_name: 'DuplicatedError',
-            error_data: {
-              type: 'user',
-              key: nil,
-              name: 'DUPLICATED_USER_ID'
+      it 'creates or updates the users' do
+        resp = subject.partial_update_user_bulk(
+          users: [
+            {
+              user_id: user_id,
+              property_name => property_value1
+            }, {
+              user_id: user_id,
+              property_name => property_value2
             }
-          )
+          ],
+          create_if_missing: true
         )
+
+        expect(resp).to be_a(Xminds::Response)
+        expect(resp.body).to be_a(String)
       end
     end
   end

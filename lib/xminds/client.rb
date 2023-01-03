@@ -29,7 +29,7 @@ module Xminds
       background_tasks: %i[trigger_background_task list_recent_background_tasks]
     }.freeze
 
-    attr_reader :type, :endpoint, :email, :password, :database_id, :frontend_user_id, :service_name, :jwt_token, :refresh_token
+    attr_reader :type, :endpoint, :email, :password, :database_id, :frontend_user_id, :frontend_session_id, :service_name, :jwt_token, :refresh_token
 
     # rubocop:disable Metrics/AbcSize
     def initialize(type: :root, **kwargs)
@@ -41,6 +41,7 @@ module Xminds
       @database_id      = kwargs[:database_id]      || Xminds.configuration.database_id
       @service_name     = kwargs[:service_name]     || Xminds.configuration.service_name
       @frontend_user_id = kwargs[:frontend_user_id] || Xminds.configuration.frontend_user_id
+      @frontend_session_id       = kwargs[:frontend_session_id]       || Xminds.configuration.frontend_session_id
 
       set_jwt_token
     end
@@ -144,7 +145,8 @@ module Xminds
         email: @email,
         password: @password,
         database_id: @database_id,
-        frontend_user_id: @frontend_user_id
+        frontend_user_id: @frontend_user_id,
+        frontend_session_id: @frontend_session_id
       ).tap do |response|
         @jwt_token     = response.token
         @refresh_token = response.refresh_token
@@ -156,7 +158,8 @@ module Xminds
         service_name: @service_name,
         password: @password,
         database_id: @database_id,
-        frontend_user_id: @frontend_user_id
+        frontend_user_id: @frontend_user_id,
+        frontend_session_id: @frontend_session_id
       ).tap do |response|
         @jwt_token     = response.token
         @refresh_token = response.refresh_token

@@ -20,7 +20,7 @@ RSpec.describe Xminds::Endpoints::Authentication do
     -> do
       root_client.create_service_account(
         service_name: service_name,
-        password: 'MyP@ssw0rd',
+        password: 'MyP@ssw0rd_1',
         role: :manager
       )
     end
@@ -210,7 +210,7 @@ RSpec.describe Xminds::Endpoints::Authentication do
       it 'returns a login response' do
         resp = subject.login_as_service(
           service_name: service_name,
-          password: 'MyP@ssw0rd',
+          password: 'MyP@ssw0rd_1',
           database_id: test_database_id
         )
 
@@ -411,8 +411,13 @@ RSpec.describe Xminds::Endpoints::Authentication do
           email: email,
           code: '988440ade91cd4c98eceb58db1c3f76bb902753c'
         )
-
-        expect(resp.body).to be_a(String)
+        @expected = { 
+          :email  => email,
+          :verified    => true
+        }.to_json
+        # assertions
+        expect(resp).to be_a(Xminds::Response)
+        resp.should == @expected
       end
     end
 

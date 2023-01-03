@@ -9,7 +9,7 @@ RSpec.describe Xminds do
 
   let(:endpoint) { Faker::Internet.url }
   let(:email) { Faker::Internet.email }
-  let(:password) { Faker::Internet.password }
+  let(:password) { (Faker::Internet.password(min_length: 12, mix_case: true, special_characters: true)) }
 
   let(:set_configuration!) do
     described_class.configure do |config|

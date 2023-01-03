@@ -54,6 +54,7 @@ module Xminds
       response = http.request(message)
 
       parse(response)
+      
     end
 
     def parse(response)

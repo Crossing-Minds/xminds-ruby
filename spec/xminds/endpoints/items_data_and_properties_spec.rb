@@ -200,7 +200,7 @@ RSpec.describe Xminds::Endpoints::ItemsDataAndProperties do
           an_instance_of(Xminds::ResponseError).and having_attributes(
             error_name: 'WrongData',
             error_data: {
-              error: 'unknown property "invalid" with "repeated=False". Available: [\'test_item_property\']',
+              error: 'unknown property "invalid" with "repeated=False". Available: `test_item_property`',
               name: 'WRONG_DATA_TYPE'
             }
           )
@@ -223,8 +223,15 @@ RSpec.describe Xminds::Endpoints::ItemsDataAndProperties do
           item: { property_name => new_property_value }
         )
 
+        @expected = { 
+          :item_created  => false,
+          :item_modified    => true
+        }.to_json
+        
+        # assertions
         expect(resp).to be_a(Xminds::Response)
-        expect(resp.body).to eq('')
+        resp.should == @expected
+
       end
 
       context 'when an invalid property is sent' do
@@ -238,7 +245,7 @@ RSpec.describe Xminds::Endpoints::ItemsDataAndProperties do
             an_instance_of(Xminds::ResponseError).and having_attributes(
               error_name: 'WrongData',
               error_data: {
-                error: 'unknown property "invalid" with "repeated=False". Available: [\'test_item_property\']',
+                error: 'unknown property "invalid" with "repeated=False". Available: `test_item_property`',
                 name: 'WRONG_DATA_TYPE'
               }
             )
@@ -310,7 +317,7 @@ RSpec.describe Xminds::Endpoints::ItemsDataAndProperties do
           an_instance_of(Xminds::ResponseError).and having_attributes(
             error_name: 'WrongData',
             error_data: {
-              error: 'unknown property "invalid" with "repeated=False". Available: [\'test_item_property\']',
+              error: 'unknown property "invalid" with "repeated=False". Available: `test_item_property`',
               name: 'WRONG_DATA_TYPE'
             }
           )
@@ -394,7 +401,7 @@ RSpec.describe Xminds::Endpoints::ItemsDataAndProperties do
           an_instance_of(Xminds::ResponseError).and having_attributes(
             error_name: 'WrongData',
             error_data: {
-              error: 'unknown property "invalid" with "repeated=False". Available: [\'test_item_property\']',
+              error: 'unknown property "invalid" with "repeated=False". Available: `test_item_property`',
               name: 'WRONG_DATA_TYPE'
             }
           )
@@ -407,30 +414,22 @@ RSpec.describe Xminds::Endpoints::ItemsDataAndProperties do
       let(:property_value1) { Faker::Number.within(range: 1..100) }
       let(:property_value2) { property_value1 + 5 }
 
-      it 'raises a DuplicatedError' do
-        expect do
-          subject.partial_update_item_bulk(
-            items: [
-              {
-                item_id: item_id,
-                property_name => property_value1
-              }, {
-                item_id: item_id,
-                property_name => property_value2
-              }
-            ],
-            create_if_missing: true
-          )
-        end.to raise_error(
-          an_instance_of(Xminds::ResponseError).and having_attributes(
-            error_name: 'DuplicatedError',
-            error_data: {
-              type: 'item',
-              key: nil,
-              name: 'DUPLICATED_ITEM_ID'
+      it 'creates or updates the items' do
+        resp = subject.partial_update_item_bulk(
+          items: [
+            {
+              item_id: item_id,
+              property_name => property_value1
+            }, {
+              item_id: item_id,
+              property_name => property_value2
             }
-          )
+          ],
+          create_if_missing: true
         )
+
+        expect(resp).to be_a(Xminds::Response)
+        expect(resp.body).to be_a(String)
       end
     end
   end
